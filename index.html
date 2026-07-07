@@ -782,7 +782,8 @@ function updateClock(){
   document.getElementById("shiftClock").textContent = now.toLocaleTimeString("pt-BR");
   const h = now.getHours(); const day = now.getDay(); const finde = (day===0 || day===6);
   let turno = "";
-  if(h>=6 && h<18) turno = finde ? "Turno Dia (1 op.)" : "Turno Dia";
+  if(h>=6 && h<14) turno = finde ? "Turno Manhã (1 op.)" : "Turno Manhã";
+  else if(h>=14 && h<22) turno = finde ? "Turno Tarde (1 op.)" : "Turno Tarde";
   else turno = finde ? "Turno Noite (1 op.)" : "Turno Noite";
   document.getElementById("shiftTurno").textContent = turno;
 }

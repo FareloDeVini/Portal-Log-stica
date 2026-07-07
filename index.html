@@ -114,8 +114,8 @@ button, .nav-item, .chip, .quick-btn, th[data-col], .mini-btn, .icon-btn, .colla
 .view-desc{color:var(--text-dim); font-size:13px; margin-top:4px;}
 
 .section-label{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-faint); font-weight:700; margin:0 0 14px;}
-.quick-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:8px;}
-.quick-btn{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 16px; display:flex; flex-direction:column; gap:12px; align-items:flex-start; transition:border-color .15s, transform .15s;}
+.quick-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; flex:1; align-content:start;}
+.quick-btn{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:12px 14px; display:flex; flex-direction:column; gap:12px; align-items:flex-start; transition:border-color .15s, transform .15s;}
 .quick-btn:hover{border-color:var(--accent); transform:translateY(-2px);}
 .quick-btn i{font-size:22px; color:var(--accent);}
 .quick-btn span{font-size:13.5px; font-weight:700;}
@@ -185,8 +185,9 @@ tbody td{padding:11px 14px; vertical-align:middle;}
 
 /* ===== EMPTY ===== */
 .empty-state{display:flex; flex-direction:column; align-items:center; justify-content:center; padding:70px 20px; color:var(--text-faint); text-align:center;}
-.mascot-hero{display:flex; align-items:center; justify-content:center; padding:6px 20px 16px;}
-.mascot-img{max-height:180px; width:auto; filter:drop-shadow(0 14px 18px rgba(0,0,0,.12));}
+.inicio-hero{display:flex; align-items:flex-start; gap:36px; margin-bottom:8px;}
+.mascot-hero{display:flex; align-items:center; justify-content:center; padding:44px 20px 16px; flex-shrink:0;}
+.mascot-img{max-height:264px; width:auto; filter:drop-shadow(0 14px 18px rgba(0,0,0,.12));}
 .empty-state i{font-size:34px; margin-bottom:14px; opacity:.5;}
 .empty-state h3{color:var(--text-dim); font-size:15px; margin-bottom:6px; font-weight:700;}
 .empty-state p{font-size:12.5px; max-width:320px;}
@@ -264,6 +265,8 @@ mark{background:var(--accent); color:var(--on-accent); padding:0 2px; border-rad
   .sidebar.mobile-open{left:0;}
   .global-search{display:none;}
   .view{padding:18px;}
+  .inicio-hero{flex-direction:column;}
+  .quick-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); width:100%;}
 }
 </style>
 </head>
@@ -818,22 +821,24 @@ function emptyState(icon,title,desc){
 /* ---------- INÍCIO ---------- */
 function renderInicio(){
   viewport.innerHTML = `
-    <div class="view-head">
+    <div class="view-head" style="margin-bottom:4px">
       <div class="view-title"><i class="bi bi-house-door-fill" style="color:var(--accent)"></i>Início</div>
       <div class="view-desc">Página inicial da Central Operacional.</div>
     </div>
-    <div class="mascot-hero">
-      <img src="${document.documentElement.getAttribute('data-theme')==='dark' ? MASCOT_IMG_DARK : MASCOT_IMG}" alt="Mascote Central Operacional" class="mascot-img">
-    </div>
-    <div class="section-label">Acesso Rápido</div>
-    <div class="quick-grid">
-      ${quickBtnHome("operacionais","bi-journal-text","Operacionais")}
-      ${quickBtnHome("faixas","bi-thermometer-half","Faixas de Temperatura")}
-      ${quickBtnHome("condutores","bi-person-vcard","Condutores")}
-      ${quickBtnHome("manutencao","bi-tools","Contatos de Manutenção")}
-      ${quickBtnHome("marfrig","bi-signpost-split","Manobras Marfrig")}
-      ${quickBtnHome("pml","bi-diagram-3","Escalonamento (PML)")}
-      ${quickBtnHome("embarcadores","bi-truck","Embarcadores")}
+    <div class="section-label" style="margin-bottom:2px">Acesso Rápido</div>
+    <div class="inicio-hero">
+      <div class="mascot-hero">
+        <img src="${document.documentElement.getAttribute('data-theme')==='dark' ? MASCOT_IMG_DARK : MASCOT_IMG}" alt="Mascote Central Operacional" class="mascot-img">
+      </div>
+      <div class="quick-grid">
+        ${quickBtnHome("operacionais","bi-journal-text","Operacionais")}
+        ${quickBtnHome("faixas","bi-thermometer-half","Faixas de Temperatura")}
+        ${quickBtnHome("condutores","bi-person-vcard","Condutores")}
+        ${quickBtnHome("manutencao","bi-tools","Contatos de Manutenção")}
+        ${quickBtnHome("marfrig","bi-signpost-split","Manobras Marfrig")}
+        ${quickBtnHome("pml","bi-diagram-3","Escalonamento (PML)")}
+        ${quickBtnHome("embarcadores","bi-truck","Embarcadores")}
+      </div>
     </div>
   `;
   viewport.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click", ()=>goToView(b.dataset.goto)));

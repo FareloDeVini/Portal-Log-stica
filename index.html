@@ -69,7 +69,6 @@ button, .nav-item, .chip, .quick-btn, th[data-col], .mini-btn, .icon-btn, .colla
 /* ===== SIDEBAR ===== */
 .sidebar{width:268px; flex-shrink:0; background:var(--bg-elev); border-right:1px solid var(--border-soft); display:flex; flex-direction:column; transition:width .25s ease; position:relative; z-index:20;}
 .sidebar.collapsed{width:78px;}
-.sidebar.hidden{width:0; min-width:0; border-right:none; overflow:hidden;}
 .sidebar-head{padding:20px 18px 16px; display:flex; align-items:center; gap:12px; border-bottom:2px solid var(--accent);}
 .brand-mark{width:40px; height:40px; border-radius:10px; flex-shrink:0; position:relative; overflow:hidden; background:var(--accent-soft); display:flex; align-items:center; justify-content:center;}
 .brand-mark i{font-size:24px; color:var(--on-accent); z-index:1;}
@@ -94,9 +93,10 @@ button, .nav-item, .chip, .quick-btn, th[data-col], .mini-btn, .icon-btn, .colla
 .nav-item.active .nav-count{color:var(--on-accent); border-color:rgba(255,255,255,.3); background:rgba(255,255,255,.15);}
 .sidebar.collapsed .nav-item span, .sidebar.collapsed .nav-item .nav-count{display:none;}
 .sidebar.collapsed .nav-item{justify-content:center;}
+.sidebar.collapsed .collapse-btn span{display:none;}
 
 .sidebar-foot{padding:14px; border-top:1px solid var(--border-soft); display:flex; flex-direction:column; gap:8px;}
-.collapse-btn{display:flex; align-items:center; justify-content:center; gap:8px; padding:8px; border-radius:var(--radius-sm); color:var(--text-faint); font-size:12px;}
+.collapse-btn{display:flex; align-items:center; justify-content:center; gap:8px; padding:8px; border-radius:var(--radius-sm); background:var(--accent); color:var(--on-accent); font-size:12px;}
 .collapse-btn:hover{background:var(--panel); color:var(--text);}
 
 /* ===== MAIN ===== */
@@ -292,21 +292,21 @@ mark{background:var(--accent); color:var(--on-accent); padding:0 2px; border-rad
     </div>
     <nav class="nav" id="navList">
       <div class="nav-section-label">Geral</div>
-      <div class="nav-item active" data-view="inicio"><i class="bi bi-house-door-fill"></i><span>Início</span></div>
-      <div class="nav-item" data-view="favoritos"><i class="bi bi-star-fill"></i><span>Favoritos</span><span class="nav-count" id="favCount">0</span></div>
+      <div class="nav-item active" data-view="inicio" title="Início"><i class="bi bi-house-door-fill"></i><span>Início</span></div>
+      <div class="nav-item" data-view="favoritos" title="Favoritos"><i class="bi bi-star-fill"></i><span>Favoritos</span><span class="nav-count" id="favCount">0</span></div>
 
       <div class="nav-section-label">Operação</div>
-      <div class="nav-item" data-view="operacionais"><i class="bi bi-journal-text"></i><span>Operacionais</span><span class="nav-count" id="cnt-operacionais">0</span></div>
-      <div class="nav-item" data-view="faixas"><i class="bi bi-thermometer-half"></i><span>Faixas de Temperatura</span><span class="nav-count" id="cnt-faixas">0</span></div>
-      <div class="nav-item" data-view="condutores"><i class="bi bi-person-vcard"></i><span>Condutores</span><span class="nav-count" id="cnt-condutores">0</span></div>
-      <div class="nav-item" data-view="manutencao"><i class="bi bi-tools"></i><span>Contatos de Manutenção</span><span class="nav-count" id="cnt-manutencao">0</span></div>
-      <div class="nav-item" data-view="marfrig"><i class="bi bi-signpost-split"></i><span>Manobras Parqueada Marfrig</span><span class="nav-count" id="cnt-marfrig">0</span></div>
-      <div class="nav-item" data-view="pml"><i class="bi bi-diagram-3"></i><span>Escalonamento (PML)</span></div>
-      <div class="nav-item" data-view="embarcadores"><i class="bi bi-truck"></i><span>Embarcadores</span><span class="nav-count" id="cnt-embarcadores">0</span></div>
+      <div class="nav-item" data-view="operacionais" title="Operacionais"><i class="bi bi-journal-text"></i><span>Operacionais</span><span class="nav-count" id="cnt-operacionais">0</span></div>
+      <div class="nav-item" data-view="faixas" title="Faixas de Temperatura"><i class="bi bi-thermometer-half"></i><span>Faixas de Temperatura</span><span class="nav-count" id="cnt-faixas">0</span></div>
+      <div class="nav-item" data-view="condutores" title="Condutores"><i class="bi bi-person-vcard"></i><span>Condutores</span><span class="nav-count" id="cnt-condutores">0</span></div>
+      <div class="nav-item" data-view="manutencao" title="Contatos de Manutenção"><i class="bi bi-tools"></i><span>Contatos de Manutenção</span><span class="nav-count" id="cnt-manutencao">0</span></div>
+      <div class="nav-item" data-view="marfrig" title="Manobras Parqueada Marfrig"><i class="bi bi-signpost-split"></i><span>Manobras Parqueada Marfrig</span><span class="nav-count" id="cnt-marfrig">0</span></div>
+      <div class="nav-item" data-view="pml" title="Escalonamento (PML)"><i class="bi bi-diagram-3"></i><span>Escalonamento (PML)</span></div>
+      <div class="nav-item" data-view="embarcadores" title="Embarcadores"><i class="bi bi-truck"></i><span>Embarcadores</span><span class="nav-count" id="cnt-embarcadores">0</span></div>
 
       <div class="nav-section-label">Sistema</div>
-      <div class="nav-item" data-view="configuracoes"><i class="bi bi-sliders"></i><span>Configurações</span></div>
-      <div class="nav-item" data-view="sobre"><i class="bi bi-info-circle"></i><span>Sobre</span></div>
+      <div class="nav-item" data-view="configuracoes" title="Configurações"><i class="bi bi-sliders"></i><span>Configurações</span></div>
+      <div class="nav-item" data-view="sobre" title="Sobre"><i class="bi bi-info-circle"></i><span>Sobre</span></div>
     </nav>
     <div class="sidebar-foot">
       <button class="collapse-btn" id="collapseBtn"><i class="bi bi-layout-sidebar-inset"></i><span>Recolher menu</span></button>
@@ -315,7 +315,6 @@ mark{background:var(--accent); color:var(--on-accent); padding:0 2px; border-rad
 
   <div class="main">
     <header class="topbar">
-      <button class="icon-btn" id="toggleSidebarBtn" title="Mostrar/ocultar menu"><i class="bi bi-layout-sidebar"></i></button>
       <button class="icon-btn" id="mobileMenuBtn" style="display:none"><i class="bi bi-list"></i></button>
       <div class="breadcrumb" id="crumbHome" style="cursor:pointer"><i class="bi bi-house"></i><span>Central</span><i class="bi bi-chevron-right" style="font-size:9px"></i><b id="crumbCurrent">Início</b></div>
       <div class="topbar-spacer"></div>
@@ -757,10 +756,12 @@ document.getElementById("navFilter").addEventListener("input", e=>{
   });
 });
 document.getElementById("collapseBtn").addEventListener("click", ()=>{
-  document.getElementById("sidebar").classList.toggle("collapsed");
-});
-document.getElementById("toggleSidebarBtn").addEventListener("click", ()=>{
-  document.getElementById("sidebar").classList.toggle("hidden");
+  const sidebar = document.getElementById("sidebar");
+  sidebar.classList.toggle("collapsed");
+  const collapsed = sidebar.classList.contains("collapsed");
+  document.getElementById("collapseBtn").innerHTML = collapsed
+    ? '<i class="bi bi-layout-sidebar"></i><span>Mostrar menu</span>'
+    : '<i class="bi bi-layout-sidebar-inset"></i><span>Recolher menu</span>';
 });
 
 const darkToggle = document.getElementById("darkToggle");

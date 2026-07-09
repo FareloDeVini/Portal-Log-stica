@@ -644,10 +644,10 @@ const DIRETRIZES_MODO = [
 
 /* ---------- PERFIS DE OPERADOR ---------- */
 const DOMINIO_LOGIN_INTERNO = "interno.local"; // domínio fixo usado só para o Supabase Auth aceitar o login; nunca é exibido ao operador
-const EMAIL_MASTER = "vinicius.luz@interno.local";
+const EMAIL_MASTER = ["vinicius.luz@interno.local", "kaue.brito@interno.local"];
 function usuarioParaEmail(usuario){ return usuario.toLowerCase().replace(/\s+/g,"") + "@" + DOMINIO_LOGIN_INTERNO; }
 function getCurrentProfile(){ return currentUser ? currentUser.email.split("@")[0] : ""; }
-function souMaster(){ return !!currentUser && currentUser.email === EMAIL_MASTER; }
+function souMaster(){ return !!currentUser && EMAIL_MASTER.includes(currentUser.email); }
 
 async function fazerLogin(){
   const usuario = document.getElementById("loginUsuario").value.trim();

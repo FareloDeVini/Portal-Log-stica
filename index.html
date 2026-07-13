@@ -1096,19 +1096,20 @@ function renderCondWrap(){
   const alvo = document.getElementById("condWrap");
   if(!alvo) return;
   const list = condutoresListaFiltrada();
-  const colspan = souMaster() ? 6 : 5;
+  const podeEditar = podeEditarContatos("condutores");
+  const colspan = podeEditar ? 6 : 5;
   alvo.innerHTML = `
     <div class="toolbar">
       <div class="tb-search"><i class="bi bi-search"></i><input id="condSearch" placeholder="Pesquisar por nome ou número..." value="${condQuery}"></div>
       ${condQuery?'<button class="chip" id="condClearBtn"><i class="bi bi-x-circle"></i> Limpar filtros</button>':''}
       <span class="result-count">${list.length} condutor(es)</span>
       <button class="mini-btn" id="condExportBtn"><i class="bi bi-file-earmark-excel"></i> Extrair Excel</button>
-      ${souMaster() ? `<button class="mini-btn" id="contatoAddBtn_condutores" style="background:var(--accent);color:var(--on-accent);border-color:var(--accent)"><i class="bi bi-plus-lg"></i> ${CONTATOS_FORM_ABERTO.condutores ? "Fechar" : "Adicionar Condutor"}</button>` : ""}
+      ${podeEditar ? `<button class="mini-btn" id="contatoAddBtn_condutores" style="background:var(--accent);color:var(--on-accent);border-color:var(--accent)"><i class="bi bi-plus-lg"></i> ${CONTATOS_FORM_ABERTO.condutores ? "Fechar" : "Adicionar Condutor"}</button>` : ""}
     </div>
-    ${(souMaster() && CONTATOS_FORM_ABERTO.condutores) ? contatoFormHtml("condutores") : ""}
+    ${(podeEditar && CONTATOS_FORM_ABERTO.condutores) ? contatoFormHtml("condutores") : ""}
     <div class="table-wrap"><div class="table-scroll">
     <table>
-      <thead><tr><th>Status</th><th>Nome</th><th>Número Cadastrado</th><th>Número Correto</th><th>Data de Validação</th>${souMaster() ? "<th></th>" : ""}</tr></thead>
+      <thead><tr><th>Status</th><th>Nome</th><th>Número Cadastrado</th><th>Número Correto</th><th>Data de Validação</th>${podeEditar ? "<th></th>" : ""}</tr></thead>
       <tbody>
       ${list.length ? list.map(c=>{
         const s = STATUS_MAP[c.status];
@@ -1118,7 +1119,7 @@ function renderCondWrap(){
           <td class="code-mono">${highlight(c.numero_cadastrado || "—", condQuery)}</td>
           <td class="code-mono">${highlight(c.numero_correto || "—", condQuery)}</td>
           <td class="code-mono" style="color:var(--text-faint)">${formatDataBR(c.data_validacao)}</td>
-          ${souMaster() ? `<td>${contatoAcoesHtml("condutores", c.id, "")}</td>` : ""}
+          ${podeEditar ? `<td>${contatoAcoesHtml("condutores", c.id, "")}</td>` : ""}
         </tr>`;
       }).join("") : `<tr><td colspan="${colspan}" style="text-align:center;color:var(--text-faint)">Nenhum condutor cadastrado.</td></tr>`}
       </tbody>
@@ -1131,7 +1132,7 @@ function renderCondWrap(){
   bindContatoCrudEvents("condutores", alvo, renderCondWrap);
 }
 
-/* ---------- CONTATOS (Gestores / Manutenção / Marfrig / Emergência / Condutores) — CRUD genérico via Supabase, edição só para souMaster() ---------- */
+/* ---------- CONTATOS (Gestores / Manutenção / Marfrig / Emergência / Condutores) — CRUD genérico via Supabase; edição restrita conforme apenasMaster de cada cfg (ver podeEditarContatos) ---------- */
 let GESTORES = [];
 let MANUTENCAO = [];
 let MARFRIG = [];
@@ -1145,7 +1146,7 @@ const STATUS_CONDUTOR_OPCOES = [
 
 const CONTATOS_CFG = {
   gestores: {
-    tabela: "contatos_gestores", ordenarPor: "operacao",
+    tabela: "contatos_gestores", ordenarPor: "operacao", apenasMaster: true,
     campos: [
       {chave:"operacao", label:"Operação", obrigatorio:true, placeholder:"Ex: Nacional 1"},
       {chave:"nome", label:"Nome", obrigatorio:true},
@@ -1154,7 +1155,7 @@ const CONTATOS_CFG = {
     getDados: ()=>GESTORES, setDados: d=>{ GESTORES = d; },
   },
   manutencao: {
-    tabela: "contatos_manutencao", ordenarPor: "nome",
+    tabela: "contatos_manutencao", ordenarPor: "nome", apenasMaster: true,
     campos: [
       {chave:"nome", label:"Nome", obrigatorio:true},
       {chave:"telefone", label:"Telefone", obrigatorio:true},
@@ -1166,7 +1167,7 @@ const CONTATOS_CFG = {
     getDados: ()=>MANUTENCAO, setDados: d=>{ MANUTENCAO = d; },
   },
   marfrig: {
-    tabela: "contatos_manobras_marfrig", ordenarPor: "nome",
+    tabela: "contatos_manobras_marfrig", ordenarPor: "nome", apenasMaster: true,
     campos: [
       {chave:"nome", label:"Nome", obrigatorio:true},
       {chave:"telefone", label:"Telefone", obrigatorio:true},
@@ -1175,7 +1176,7 @@ const CONTATOS_CFG = {
     getDados: ()=>MARFRIG, setDados: d=>{ MARFRIG = d; },
   },
   emergencia: {
-    tabela: "contatos_emergencia", ordenarPor: "nome",
+    tabela: "contatos_emergencia", ordenarPor: "nome", apenasMaster: true,
     campos: [
       {chave:"nome", label:"Nome", obrigatorio:true},
       {chave:"funcao", label:"Função", obrigatorio:true, placeholder:"Ex: Grupo Crítico 24h / Escalonamento"},
@@ -1185,9 +1186,10 @@ const CONTATOS_CFG = {
     getDados: ()=>CONTATOS_EMERGENCIA, setDados: d=>{ CONTATOS_EMERGENCIA = d; },
   },
   condutores: {
+    // apenasMaster:false — RLS da tabela contatos_condutores libera insert/update/delete pra qualquer usuário autenticado
     // data_validacao NÃO entra em campos: assim o INSERT deixa o default current_date do banco preencher,
     // e o UPDATE nunca sobrescreve a data original de validação
-    tabela: "contatos_condutores", ordenarPor: "data_validacao",
+    tabela: "contatos_condutores", ordenarPor: "data_validacao", apenasMaster: false,
     campos: [
       {chave:"status", label:"Status", tipo:"select", obrigatorio:true, opcoes:STATUS_CONDUTOR_OPCOES},
       {chave:"nome", label:"Nome", obrigatorio:true},
@@ -1200,6 +1202,12 @@ const CONTATOS_CFG = {
 
 let CONTATOS_FORM_ABERTO = {gestores:false, manutencao:false, marfrig:false, emergencia:false, condutores:false};
 let CONTATOS_EDIT_ID = {gestores:null, manutencao:null, marfrig:null, emergencia:null, condutores:null};
+
+// controla quem vê Adicionar/Editar/Excluir em cada tela de contatos: telas com apenasMaster:true continuam só para souMaster();
+// Condutores (apenasMaster:false) libera pra qualquer usuário autenticado, acompanhando a política de RLS liberada no Supabase
+function podeEditarContatos(key){
+  return CONTATOS_CFG[key].apenasMaster ? souMaster() : !!currentUser;
+}
 
 async function carregarContatos(key){
   const cfg = CONTATOS_CFG[key];
@@ -1263,9 +1271,9 @@ async function excluirContato(key, id, onDone){
   onDone && onDone();
 }
 
-// liga os botões master (Adicionar/Editar/Excluir) da tela de contatos identificada por key; alvo é o wrap da tela e rerender é a função que o redesenha
+// liga os botões de Adicionar/Editar/Excluir da tela de contatos identificada por key (souMaster() ou qualquer usuário, conforme apenasMaster do cfg); alvo é o wrap da tela e rerender é a função que o redesenha
 function bindContatoCrudEvents(key, alvo, rerender){
-  if(!souMaster()) return;
+  if(!podeEditarContatos(key)) return;
   alvo.querySelector(`#contatoAddBtn_${key}`)?.addEventListener("click", ()=>{
     CONTATOS_FORM_ABERTO[key] = !CONTATOS_FORM_ABERTO[key];
     CONTATOS_EDIT_ID[key] = null;
@@ -1280,12 +1288,12 @@ function bindContatoCrudEvents(key, alvo, rerender){
   alvo.querySelectorAll(`.contato-del-btn[data-key="${key}"]`).forEach(b=>b.addEventListener("click", ()=>excluirContato(key, b.dataset.id, rerender)));
 }
 
-// linha de ações (botões de cópia específicos da tela + Editar/Excluir, só para souMaster()) — sempre em row, lado a lado, via .proc-actions
+// linha de ações (botões de cópia específicos da tela + Editar/Excluir, conforme podeEditarContatos(key)) — sempre em row, lado a lado, via .proc-actions
 function contatoAcoesHtml(key, id, copyBtnsHtml){
   return `
   <div class="proc-actions" style="margin-top:8px">
     ${copyBtnsHtml}
-    ${souMaster() ? `<button class="mini-btn contato-edit-btn" data-key="${key}" data-id="${id}"><i class="bi bi-pencil"></i> Editar</button>
+    ${podeEditarContatos(key) ? `<button class="mini-btn contato-edit-btn" data-key="${key}" data-id="${id}"><i class="bi bi-pencil"></i> Editar</button>
     <button class="mini-btn contato-del-btn" data-key="${key}" data-id="${id}" style="color:#e5484d;border-color:#e5484d"><i class="bi bi-trash"></i> Excluir</button>` : ""}
   </div>`;
 }

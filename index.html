@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
 <style>
 :root{
   --bg:#0a0a0a;
@@ -588,50 +589,11 @@ E("5045","Cordenonsi – Vazio"),
 E("12328","Cordenonsi – Marfrig Parqueado (Logístico)"),
 ];
 
-/* ---------- CONDUTORES (aba "CONDUTORES" — base bloqueada / contato desatualizado) ---------- */
-function C(nome, telefone, data, status){ return {id:"cd_"+nome.replace(/\s+/g,"_"), nome, telefone: telefone||"—", data: data||"—", status}; }
-const CONDUTORES = [
-C("Antony Jefferson de Araujo Santos","(11) 95859-0635","08/04/2026","bloqueado"),
-C("Emerson Franzotti","(55) 47 9128-6757","15/04/2026","bloqueado"),
-C("Juliete Rocha","(49) 9904-6606","18/04/2026","bloqueado"),
-C("Derli Emilio Ramos Froner","(55) 55 9612-1942","30/04/2026","bloqueado"),
-C("Graciano Jacomel Fernandes Marques","(55) 49 8802-6658","30/04/2026","bloqueado"),
-C("Erisvaldo Santos Ramalho","(11) 9898-7424","05/05/2026","bloqueado"),
-C("Jeferson Carneiro do Prado","(55) 41 9999-0890","05/05/2026","bloqueado"),
-C("Jose Carlos Alves Ferreira","(55) 46 8826-6516","14/05/2026","bloqueado"),
-C("Neuri de Sousa Silva","","—","desatualizado"),
-C("Cleidson Souza dos Santos","(55) 11 94731-7373","21/05/2026","bloqueado"),
-C("Ivan da Rocha Correa","(49) 8804-2649","21/05/2026","bloqueado"),
-C("Jolbert Luzardo Pineda Mora","(55) 49 9185-2185","21/05/2026","bloqueado"),
-C("Eliandro Sidnei dos Santos","","22/05/2026","desatualizado"),
-C("Wellington Souza da Silva","(55) 49 8906-3296","25/05/2026","bloqueado"),
-C("Jose Alexandre de Oliveira","","01/06/2026","desatualizado"),
-C("Marcio Santos Santana","","05/06/2026","desatualizado"),
-C("Marcelo Ferraz do Nascimento","","05/06/2026","desatualizado"),
-C("Alexandre Neckel","","05/06/2026","desatualizado"),
-C("Edson Oliveira dos Santos","","08/06/2026","desatualizado"),
-C("Dener Souza Leite","","08/06/2026","desatualizado"),
-C("Alexis Romero Chavez","","08/06/2026","desatualizado"),
-C("Ozieni Malavazi Junior","","10/06/2026","desatualizado"),
-C("Luiz Carlos de Souza Junior","","11/06/2026","desatualizado"),
-C("Gabriel Mendes Pinheiro","","15/06/2026","desatualizado"),
-C("Josiane de Lima","","20/06/2026","desatualizado"),
-];
+/* ---------- CONDUTORES (aba "CONDUTORES" — base bloqueada / contato desatualizado) — dados via Supabase, ver CONTATOS_CFG na camada de aplicação ---------- */
 
-/* ---------- CONTATOS DE MANUTENÇÃO (aba "CONTATOS MANUT.") ---------- */
-const MANUTENCAO = [
-{id:"mt1", nome:"Claudinei Chiquinho", telefone:"(49) 9969-1206", segsex:"07:00 às 17:00", sabado:"00:00 às 23:59", domingo:"00:00 às 12:00", funcao:"Manutenção"},
-{id:"mt2", nome:"Rudimar", telefone:"(49) 9936-0983", segsex:"16:30 às 02:30", sabado:"—", domingo:"—", funcao:"Manutenção"},
-{id:"mt3", nome:"Yuri", telefone:"(49) 9830-3270", segsex:"02:30 às 12:30", sabado:"—", domingo:"12:00 até segunda de manhã", funcao:"Manutenção"},
-{id:"mt4", nome:"Fernando", telefone:"(49) 9190-0711", segsex:"Todos os dias", sabado:"Todos os dias", domingo:"Todos os dias", funcao:"Gerente de Manutenção"},
-];
+/* ---------- CONTATOS DE MANUTENÇÃO (aba "CONTATOS MANUT.") — dados via Supabase, ver CONTATOS_CFG na camada de aplicação ---------- */
 
-/* ---------- MANOBRAS PARQUEADA MARFRIG (aba "MANOBRAS PARQUEADA MARFRIG") ---------- */
-const MARFRIG = [
-{id:"mf1", nome:"Célio Custodio Venancio da Silva", telefone:"(55) 65 8169-4214", horario:"05h às 13h"},
-{id:"mf2", nome:"Nelio Marques Alves Correa", telefone:"(55) 65 9284-9637", horario:"13h às 21h"},
-{id:"mf3", nome:"Marcos", telefone:"(55) 65 9300-3993", horario:"21h às 05h"},
-];
+/* ---------- MANOBRAS PARQUEADA MARFRIG (aba "MANOBRAS PARQUEADA MARFRIG") — dados via Supabase, ver CONTATOS_CFG na camada de aplicação ---------- */
 
 /* ---------- PML — PLANO DE MONITORAMENTO LOGÍSTICO (Edição 06 | 25/06/2026) ---------- */
 const PML_INFO = {
@@ -652,32 +614,9 @@ const ESCALONAMENTO = [
 {id:"esc9", passo:9, titulo:"Último nível de escalonamento", prazo:"após 30 min", desc:"Somente para desligamento e casos críticos — acionar diretamente Luiz Cordenonsi."},
 ];
 
-const GESTORES = [
-{id:"g1", operacao:"Internacional 1", nome:"Diego Armando", telefone:"(49) 9169-9497"},
-{id:"g2", operacao:"Internacional 2", nome:"Aline de Castro", telefone:"(49) 9830-3258"},
-{id:"g3", operacao:"Internacional Parqueadas", nome:"Robson Bianchet", telefone:"(49) 99644-4344"},
-{id:"g4", operacao:"Nacional 1", nome:"Ericka Prestes", telefone:"(11) 98749-4248"},
-{id:"g5", operacao:"Nacional 2", nome:"Ericka Prestes", telefone:"(11) 98749-4248"},
-{id:"g6", operacao:"Nacional 3", nome:"Ericka Prestes", telefone:"(11) 98749-4248"},
-{id:"g7", operacao:"Centro-Oeste", nome:"Lucas / Juan (madrugada)", telefone:"(49) 91875-791 / (49) 98303-206"},
-{id:"g8", operacao:"Dedicados Martin Brower", nome:"Rosmeri Welter / Juan (madrugada)", telefone:"(11) 97750-6765 / (49) 98303-206"},
-{id:"g9", operacao:"Dedicados BRF", nome:"Rafael Bianchet / Juan (madrugada)", telefone:"(49) 91822-331 / (49) 98303-206"},
-];
+// Gestores por operação — dados via Supabase, ver CONTATOS_CFG na camada de aplicação
 
-const COORDENADORES = [
-{id:"c1", operacao:"Internacional 1, 2 e Parqueadas", nome:"Franciele Tuni", telefone:"(49) 99611-180"},
-{id:"c2", operacao:"Centro-Oeste", nome:"Felipe Longatto / Juan (madrugada)", telefone:"(49) 91210-022 / (49) 9830-3206"},
-{id:"c3", operacao:"Dedicados BRF", nome:"Felipe Longatto / Juan (madrugada)", telefone:"(49) 91210-022 / (49) 9830-3206"},
-{id:"c4", operacao:"Dedicados MB", nome:"Felipe Longatto / Juan (madrugada)", telefone:"(49) 91210-022 / (49) 9830-3206"},
-{id:"c5", operacao:"Nacional 3", nome:"Marocco", telefone:"(49) 99988-8500"},
-];
-
-// Grupo crítico 24h — situações de risco/desligamento de equipamento (retorno até 30 min)
-const CONTATOS_EMERGENCIA = [
-{id:"ce1", nome:"Kevlin Ortiz", funcao:"Grupo Crítico 24h / Escalonamento", telefone:"(11) 97961-0002", email:"kevilin.mora@cordenonsi.com"},
-{id:"ce2", nome:"Magna Santos", funcao:"Grupo Crítico 24h / Escalonamento", telefone:"(11) 97750-0887", email:"magna.santos@cordenonsi.com.br"},
-{id:"ce3", nome:"Luiz Cordenonsi", funcao:"Último nível — desligamento/casos críticos", telefone:"(49) 99987-9127", email:"luizfilho@cordenonsi.com.br"},
-];
+// Grupo crítico 24h — situações de risco/desligamento de equipamento (retorno até 30 min) — dados via Supabase, ver CONTATOS_CFG na camada de aplicação
 
 // Cargas críticas — tempo de controle 40 min fora de faixa (vs. 60 min padrão)
 const CARGAS_CRITICAS_TIPOS = ["Carne resfriada","Peixe resfriado","Peixe congelado","Frutas","Sorvetes","Medicamento"];
@@ -1128,92 +1067,302 @@ const STATUS_MAP = {
   bloqueado:{icon:"bi-telephone-x-fill", cls:"bad", label:"Base bloqueada"},
   desatualizado:{icon:"bi-exclamation-triangle-fill", cls:"warn", label:"Contato desatualizado"},
 };
+function condutoresListaFiltrada(){
+  const q = condQuery.toLowerCase();
+  return CONDUTORES.filter(c=>!q || (c.nome+(c.numero_cadastrado||"")+(c.numero_correto||"")).toLowerCase().includes(q));
+}
+function exportarCondutoresExcel(){
+  const linhas = condutoresListaFiltrada().map(c=>({
+    "Status": STATUS_MAP[c.status].label,
+    "Nome": c.nome,
+    "Número Cadastrado": c.numero_cadastrado || "—",
+    "Número Correto": c.numero_correto || "—",
+    "Data de Validação": formatDataBR(c.data_validacao),
+  }));
+  const ws = XLSX.utils.json_to_sheet(linhas);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Condutores");
+  XLSX.writeFile(wb, `condutores_bloqueados_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
 function renderCondutores(){
-  let list = CONDUTORES.filter(c=>{
-    const q = condQuery.toLowerCase();
-    return !q || (c.nome+c.telefone+c.data).toLowerCase().includes(q);
-  });
   viewport.innerHTML = `
     <div class="view-head"><div class="view-title"><i class="bi bi-person-vcard" style="color:var(--accent)"></i>Condutores</div>
     <div class="view-desc">Condutores com base bloqueada ou contato desatualizado — lista oficial da operação.</div></div>
+    <div id="condWrap" style="display:flex;flex-direction:column;flex:1;min-height:0;">${escalaLoadingHtml()}</div>
+  `;
+  carregarContatos("condutores").then(renderCondWrap);
+}
+function renderCondWrap(){
+  const alvo = document.getElementById("condWrap");
+  if(!alvo) return;
+  const list = condutoresListaFiltrada();
+  const colspan = souMaster() ? 6 : 5;
+  alvo.innerHTML = `
     <div class="toolbar">
-      <div class="tb-search"><i class="bi bi-search"></i><input id="condSearch" placeholder="Pesquisar por nome ou telefone..." value="${condQuery}"></div>
+      <div class="tb-search"><i class="bi bi-search"></i><input id="condSearch" placeholder="Pesquisar por nome ou número..." value="${condQuery}"></div>
       ${condQuery?'<button class="chip" id="condClearBtn"><i class="bi bi-x-circle"></i> Limpar filtros</button>':''}
       <span class="result-count">${list.length} condutor(es)</span>
+      <button class="mini-btn" id="condExportBtn"><i class="bi bi-file-earmark-excel"></i> Extrair Excel</button>
+      ${souMaster() ? `<button class="mini-btn" id="contatoAddBtn_condutores" style="background:var(--accent);color:var(--on-accent);border-color:var(--accent)"><i class="bi bi-plus-lg"></i> ${CONTATOS_FORM_ABERTO.condutores ? "Fechar" : "Adicionar Condutor"}</button>` : ""}
     </div>
+    ${(souMaster() && CONTATOS_FORM_ABERTO.condutores) ? contatoFormHtml("condutores") : ""}
     <div class="table-wrap"><div class="table-scroll">
     <table>
-      <thead><tr><th>Status</th><th>Nome</th><th>Telefone</th><th>Data de Validação</th></tr></thead>
+      <thead><tr><th>Status</th><th>Nome</th><th>Número Cadastrado</th><th>Número Correto</th><th>Data de Validação</th>${souMaster() ? "<th></th>" : ""}</tr></thead>
       <tbody>
-      ${list.map(c=>{
+      ${list.length ? list.map(c=>{
         const s = STATUS_MAP[c.status];
         return `<tr class="row-flag">
           <td><i class="bi ${s.icon} status-icon ${s.cls}" title="${s.label}"></i> <span style="font-size:11px;color:var(--text-faint)">${s.label}</span></td>
           <td><b>${highlight(c.nome, condQuery)}</b></td>
-          <td class="code-mono">${highlight(c.telefone, condQuery)}</td>
-          <td class="code-mono" style="color:var(--text-faint)">${c.data}</td>
+          <td class="code-mono">${highlight(c.numero_cadastrado || "—", condQuery)}</td>
+          <td class="code-mono">${highlight(c.numero_correto || "—", condQuery)}</td>
+          <td class="code-mono" style="color:var(--text-faint)">${formatDataBR(c.data_validacao)}</td>
+          ${souMaster() ? `<td>${contatoAcoesHtml("condutores", c.id, "")}</td>` : ""}
         </tr>`;
-      }).join("")}
+      }).join("") : `<tr><td colspan="${colspan}" style="text-align:center;color:var(--text-faint)">Nenhum condutor cadastrado.</td></tr>`}
       </tbody>
     </table>
     </div></div>
   `;
-  document.getElementById("condSearch").addEventListener("input", e=>{condQuery=e.target.value; renderCondutores();});
-  document.getElementById("condClearBtn")?.addEventListener("click", ()=>{condQuery=""; renderCondutores();});
+  document.getElementById("condSearch").addEventListener("input", e=>{condQuery=e.target.value; renderCondWrap();});
+  document.getElementById("condClearBtn")?.addEventListener("click", ()=>{condQuery=""; renderCondWrap();});
+  document.getElementById("condExportBtn").addEventListener("click", exportarCondutoresExcel);
+  bindContatoCrudEvents("condutores", alvo, renderCondWrap);
+}
+
+/* ---------- CONTATOS (Gestores / Manutenção / Marfrig / Emergência / Condutores) — CRUD genérico via Supabase, edição só para souMaster() ---------- */
+let GESTORES = [];
+let MANUTENCAO = [];
+let MARFRIG = [];
+let CONTATOS_EMERGENCIA = [];
+let CONDUTORES = [];
+
+const STATUS_CONDUTOR_OPCOES = [
+  {value:"bloqueado", label:"Base Bloqueada"},
+  {value:"desatualizado", label:"Contato Desatualizado"},
+];
+
+const CONTATOS_CFG = {
+  gestores: {
+    tabela: "contatos_gestores", ordenarPor: "operacao",
+    campos: [
+      {chave:"operacao", label:"Operação", obrigatorio:true, placeholder:"Ex: Nacional 1"},
+      {chave:"nome", label:"Nome", obrigatorio:true},
+      {chave:"telefone", label:"Telefone", obrigatorio:true, placeholder:"(00) 00000-0000"},
+    ],
+    getDados: ()=>GESTORES, setDados: d=>{ GESTORES = d; },
+  },
+  manutencao: {
+    tabela: "contatos_manutencao", ordenarPor: "nome",
+    campos: [
+      {chave:"nome", label:"Nome", obrigatorio:true},
+      {chave:"telefone", label:"Telefone", obrigatorio:true},
+      {chave:"segsex", label:"Seg a Sex", placeholder:"Ex: 07:00 às 17:00"},
+      {chave:"sabado", label:"Sábado", placeholder:"Ex: 00:00 às 23:59"},
+      {chave:"domingo", label:"Domingo", placeholder:"Ex: 00:00 às 12:00"},
+      {chave:"funcao", label:"Função", obrigatorio:true, placeholder:"Ex: Manutenção"},
+    ],
+    getDados: ()=>MANUTENCAO, setDados: d=>{ MANUTENCAO = d; },
+  },
+  marfrig: {
+    tabela: "contatos_manobras_marfrig", ordenarPor: "nome",
+    campos: [
+      {chave:"nome", label:"Nome", obrigatorio:true},
+      {chave:"telefone", label:"Telefone", obrigatorio:true},
+      {chave:"horario", label:"Horário", obrigatorio:true, placeholder:"Ex: 05h às 13h"},
+    ],
+    getDados: ()=>MARFRIG, setDados: d=>{ MARFRIG = d; },
+  },
+  emergencia: {
+    tabela: "contatos_emergencia", ordenarPor: "nome",
+    campos: [
+      {chave:"nome", label:"Nome", obrigatorio:true},
+      {chave:"funcao", label:"Função", obrigatorio:true, placeholder:"Ex: Grupo Crítico 24h / Escalonamento"},
+      {chave:"telefone", label:"Telefone", obrigatorio:true},
+      {chave:"email", label:"E-mail", obrigatorio:true, placeholder:"nome@empresa.com"},
+    ],
+    getDados: ()=>CONTATOS_EMERGENCIA, setDados: d=>{ CONTATOS_EMERGENCIA = d; },
+  },
+  condutores: {
+    // data_validacao NÃO entra em campos: assim o INSERT deixa o default current_date do banco preencher,
+    // e o UPDATE nunca sobrescreve a data original de validação
+    tabela: "contatos_condutores", ordenarPor: "data_validacao",
+    campos: [
+      {chave:"status", label:"Status", tipo:"select", obrigatorio:true, opcoes:STATUS_CONDUTOR_OPCOES},
+      {chave:"nome", label:"Nome", obrigatorio:true},
+      {chave:"numero_cadastrado", label:"Número Cadastrado", placeholder:"(00) 00000-0000"},
+      {chave:"numero_correto", label:"Número Correto", placeholder:"(00) 00000-0000"},
+    ],
+    getDados: ()=>CONDUTORES, setDados: d=>{ CONDUTORES = d; },
+  },
+};
+
+let CONTATOS_FORM_ABERTO = {gestores:false, manutencao:false, marfrig:false, emergencia:false, condutores:false};
+let CONTATOS_EDIT_ID = {gestores:null, manutencao:null, marfrig:null, emergencia:null, condutores:null};
+
+async function carregarContatos(key){
+  const cfg = CONTATOS_CFG[key];
+  if(!sb){ cfg.setDados([]); return; }
+  const { data, error } = await sb.from(cfg.tabela).select("*").order(cfg.ordenarPor, { ascending: true });
+  if(error) showToast("Erro ao carregar contatos: " + error.message);
+  cfg.setDados(data || []);
+}
+async function carregarTodosContatos(){
+  await Promise.all(Object.keys(CONTATOS_CFG).map(carregarContatos));
+}
+
+function contatoFormHtml(key){
+  const cfg = CONTATOS_CFG[key];
+  const row = CONTATOS_EDIT_ID[key] ? cfg.getDados().find(r=>r.id===CONTATOS_EDIT_ID[key]) : null;
+  return `
+  <div class="settings-card" id="contatoForm_${key}" style="margin-bottom:16px">
+    <div class="section-label" style="margin:0 0 12px">${row ? "Editar Contato" : "Novo Contato"}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px">
+      ${cfg.campos.map(c=>`
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-faint)">${c.label}
+          ${c.tipo==="select" ? `
+          <select id="cf_${key}_${c.chave}" style="background:var(--bg-elev);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--text)">
+            <option value="">Selecione…</option>
+            ${c.opcoes.map(o=>`<option value="${o.value}" ${row && row[c.chave]===o.value ? "selected" : ""}>${o.label}</option>`).join("")}
+          </select>` : `
+          <input type="text" id="cf_${key}_${c.chave}" placeholder="${c.placeholder||''}" value="${row ? (row[c.chave]||"") : ""}" style="background:var(--bg-elev);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--text)">`}
+        </label>
+      `).join("")}
+    </div>
+    <button class="mini-btn" id="cfSalvar_${key}" style="background:var(--accent);color:var(--on-accent);border-color:var(--accent)"><i class="bi bi-check2"></i> Salvar</button>
+  </div>`;
+}
+
+async function salvarContato(key, onDone){
+  const cfg = CONTATOS_CFG[key];
+  const payload = {};
+  cfg.campos.forEach(c=>{ payload[c.chave] = document.getElementById(`cf_${key}_${c.chave}`).value.trim(); });
+  const faltando = cfg.campos.filter(c=>c.obrigatorio && !payload[c.chave]);
+  if(faltando.length){ showToast(`Preencha: ${faltando.map(c=>c.label).join(", ")}.`); return; }
+  if(!sb){ showToast("Supabase não configurado."); return; }
+  const editId = CONTATOS_EDIT_ID[key];
+  const { error } = editId
+    ? await sb.from(cfg.tabela).update(payload).eq("id", editId)
+    : await sb.from(cfg.tabela).insert(payload);
+  if(error){ showToast("Erro ao salvar contato: " + error.message); return; }
+  showToast("Contato salvo!");
+  CONTATOS_FORM_ABERTO[key] = false;
+  CONTATOS_EDIT_ID[key] = null;
+  await carregarContatos(key);
+  onDone && onDone();
+}
+
+async function excluirContato(key, id, onDone){
+  if(!confirm("Excluir este contato?")) return;
+  if(!sb) return;
+  const { error } = await sb.from(CONTATOS_CFG[key].tabela).delete().eq("id", id);
+  if(error){ showToast("Erro ao excluir contato: " + error.message); return; }
+  showToast("Contato excluído.");
+  await carregarContatos(key);
+  onDone && onDone();
+}
+
+// liga os botões master (Adicionar/Editar/Excluir) da tela de contatos identificada por key; alvo é o wrap da tela e rerender é a função que o redesenha
+function bindContatoCrudEvents(key, alvo, rerender){
+  if(!souMaster()) return;
+  alvo.querySelector(`#contatoAddBtn_${key}`)?.addEventListener("click", ()=>{
+    CONTATOS_FORM_ABERTO[key] = !CONTATOS_FORM_ABERTO[key];
+    CONTATOS_EDIT_ID[key] = null;
+    rerender();
+  });
+  if(CONTATOS_FORM_ABERTO[key]) alvo.querySelector(`#cfSalvar_${key}`)?.addEventListener("click", ()=>salvarContato(key, rerender));
+  alvo.querySelectorAll(`.contato-edit-btn[data-key="${key}"]`).forEach(b=>b.addEventListener("click", ()=>{
+    CONTATOS_EDIT_ID[key] = b.dataset.id;
+    CONTATOS_FORM_ABERTO[key] = true;
+    rerender();
+  }));
+  alvo.querySelectorAll(`.contato-del-btn[data-key="${key}"]`).forEach(b=>b.addEventListener("click", ()=>excluirContato(key, b.dataset.id, rerender)));
+}
+
+// linha de ações (botões de cópia específicos da tela + Editar/Excluir, só para souMaster()) — sempre em row, lado a lado, via .proc-actions
+function contatoAcoesHtml(key, id, copyBtnsHtml){
+  return `
+  <div class="proc-actions" style="margin-top:8px">
+    ${copyBtnsHtml}
+    ${souMaster() ? `<button class="mini-btn contato-edit-btn" data-key="${key}" data-id="${id}"><i class="bi bi-pencil"></i> Editar</button>
+    <button class="mini-btn contato-del-btn" data-key="${key}" data-id="${id}" style="color:#e5484d;border-color:#e5484d"><i class="bi bi-trash"></i> Excluir</button>` : ""}
+  </div>`;
 }
 
 /* ---------- MANUTENÇÃO ---------- */
 let mtQuery="";
 function renderManutencao(){
-  let list = MANUTENCAO.filter(m=>{
-    const q=mtQuery.toLowerCase();
-    return !q || (m.nome+m.telefone+m.funcao).toLowerCase().includes(q);
-  });
   viewport.innerHTML = `
     <div class="view-head"><div class="view-title"><i class="bi bi-tools" style="color:var(--accent)"></i>Contatos de Manutenção</div>
     <div class="view-desc">Equipe de manutenção por turno e dia da semana.</div></div>
+    <div id="mtWrap">${escalaLoadingHtml()}</div>
+  `;
+  carregarContatos("manutencao").then(renderMtWrap);
+}
+function renderMtWrap(){
+  const alvo = document.getElementById("mtWrap");
+  if(!alvo) return;
+  const list = MANUTENCAO.filter(m=>{
+    const q=mtQuery.toLowerCase();
+    return !q || (m.nome+m.telefone+m.funcao).toLowerCase().includes(q);
+  });
+  alvo.innerHTML = `
     <div class="toolbar">
       <div class="tb-search"><i class="bi bi-search"></i><input id="mtSearch" placeholder="Pesquisar contato..." value="${mtQuery}"></div>
       ${mtQuery?'<button class="chip" id="mtClearBtn"><i class="bi bi-x-circle"></i> Limpar filtros</button>':''}
       <span class="result-count">${list.length} contato(s)</span>
+      ${souMaster() ? `<button class="mini-btn" id="contatoAddBtn_manutencao" style="background:var(--accent);color:var(--on-accent);border-color:var(--accent)"><i class="bi bi-plus-lg"></i> ${CONTATOS_FORM_ABERTO.manutencao ? "Fechar" : "Adicionar Contato"}</button>` : ""}
     </div>
+    ${(souMaster() && CONTATOS_FORM_ABERTO.manutencao) ? contatoFormHtml("manutencao") : ""}
     <div class="cards-grid">
       ${list.length ? list.map(m=>`
       <div class="contact-card">
         <div class="contact-head"><div class="avatar">${m.nome.slice(0,2).toUpperCase()}</div>
           <div><div class="contact-name">${highlight(m.nome, mtQuery)}</div><div class="contact-role">${highlight(m.funcao, mtQuery)}</div></div></div>
         <div class="contact-row"><i class="bi bi-telephone"></i>${m.telefone}</div>
-        <div class="contact-row"><i class="bi bi-calendar3"></i>Seg a Sex: ${m.segsex}</div>
-        <div class="contact-row"><i class="bi bi-calendar-week"></i>Sábado: ${m.sabado}</div>
-        <div class="contact-row"><i class="bi bi-calendar-event"></i>Domingo: ${m.domingo}</div>
-        <div class="proc-actions" style="margin-top:8px">
+        <div class="contact-row"><i class="bi bi-calendar3"></i>Seg a Sex: ${m.segsex || "—"}</div>
+        <div class="contact-row"><i class="bi bi-calendar-week"></i>Sábado: ${m.sabado || "—"}</div>
+        <div class="contact-row"><i class="bi bi-calendar-event"></i>Domingo: ${m.domingo || "—"}</div>
+        ${contatoAcoesHtml("manutencao", m.id, `
           <button class="mini-btn copy-tel" data-c="${m.telefone}"><i class="bi bi-telephone"></i> Copiar telefone</button>
           <button class="mini-btn copy-all" data-c="${m.nome} — ${m.telefone} — ${m.funcao}"><i class="bi bi-clipboard"></i> Copiar tudo</button>
-        </div>
+        `)}
       </div>`).join("") : emptyState("bi-tools","Nenhum contato encontrado","Ajuste a pesquisa.")}
     </div>
   `;
-  document.getElementById("mtSearch").addEventListener("input", e=>{mtQuery=e.target.value; renderManutencao();});
-  document.getElementById("mtClearBtn")?.addEventListener("click", ()=>{mtQuery=""; renderManutencao();});
-  viewport.querySelectorAll(".copy-tel").forEach(b=>b.addEventListener("click", ()=>copyText(b.dataset.c,"Telefone copiado!")));
-  viewport.querySelectorAll(".copy-all").forEach(b=>b.addEventListener("click", ()=>copyText(b.dataset.c,"Informações copiadas!")));
+  document.getElementById("mtSearch").addEventListener("input", e=>{mtQuery=e.target.value; renderMtWrap();});
+  document.getElementById("mtClearBtn")?.addEventListener("click", ()=>{mtQuery=""; renderMtWrap();});
+  alvo.querySelectorAll(".copy-tel").forEach(b=>b.addEventListener("click", ()=>copyText(b.dataset.c,"Telefone copiado!")));
+  alvo.querySelectorAll(".copy-all").forEach(b=>b.addEventListener("click", ()=>copyText(b.dataset.c,"Informações copiadas!")));
+  bindContatoCrudEvents("manutencao", alvo, renderMtWrap);
 }
 
 /* ---------- MARFRIG ---------- */
 let mfQuery="";
 function renderMarfrig(){
-  let list = MARFRIG.filter(m=>{
-    const q=mfQuery.toLowerCase();
-    return !q || (m.nome+m.telefone+m.horario).toLowerCase().includes(q);
-  });
   viewport.innerHTML = `
     <div class="view-head"><div class="view-title"><i class="bi bi-signpost-split" style="color:var(--accent)"></i>Manobras Parqueada Marfrig</div>
     <div class="view-desc">Equipe responsável pela parqueada Marfrig, por turno.</div></div>
+    <div id="mfWrap">${escalaLoadingHtml()}</div>
+  `;
+  carregarContatos("marfrig").then(renderMfWrap);
+}
+function renderMfWrap(){
+  const alvo = document.getElementById("mfWrap");
+  if(!alvo) return;
+  const list = MARFRIG.filter(m=>{
+    const q=mfQuery.toLowerCase();
+    return !q || (m.nome+m.telefone+m.horario).toLowerCase().includes(q);
+  });
+  alvo.innerHTML = `
     <div class="toolbar">
       <div class="tb-search"><i class="bi bi-search"></i><input id="mfSearch" placeholder="Pesquisar..." value="${mfQuery}"></div>
       ${mfQuery?'<button class="chip" id="mfClearBtn"><i class="bi bi-x-circle"></i> Limpar filtros</button>':''}
       <span class="result-count">${list.length} resultado(s)</span>
+      ${souMaster() ? `<button class="mini-btn" id="contatoAddBtn_marfrig" style="background:var(--accent);color:var(--on-accent);border-color:var(--accent)"><i class="bi bi-plus-lg"></i> ${CONTATOS_FORM_ABERTO.marfrig ? "Fechar" : "Adicionar Contato"}</button>` : ""}
     </div>
+    ${(souMaster() && CONTATOS_FORM_ABERTO.marfrig) ? contatoFormHtml("marfrig") : ""}
     <div class="cards-grid">
       ${list.length ? list.map(m=>`
       <div class="contact-card">
@@ -1221,13 +1370,14 @@ function renderMarfrig(){
           <div><div class="contact-name">${highlight(m.nome, mfQuery)}</div><div class="contact-role">Parqueada Marfrig</div></div></div>
         <div class="contact-row"><i class="bi bi-telephone"></i>${m.telefone}</div>
         <div class="contact-row"><i class="bi bi-clock"></i>${m.horario}</div>
-        <div class="proc-actions"><button class="mini-btn copy-mf" data-c="${m.nome} — ${m.telefone} (${m.horario})"><i class="bi bi-clipboard"></i> Copiar</button></div>
+        ${contatoAcoesHtml("marfrig", m.id, `<button class="mini-btn copy-mf" data-c="${m.nome} — ${m.telefone} (${m.horario})"><i class="bi bi-clipboard"></i> Copiar</button>`)}
       </div>`).join("") : emptyState("bi-signpost-split","Nenhum resultado","Ajuste a pesquisa.")}
     </div>
   `;
-  document.getElementById("mfSearch").addEventListener("input", e=>{mfQuery=e.target.value; renderMarfrig();});
-  document.getElementById("mfClearBtn")?.addEventListener("click", ()=>{mfQuery=""; renderMarfrig();});
-  viewport.querySelectorAll(".copy-mf").forEach(b=>b.addEventListener("click", ()=>copyText(b.dataset.c,"Copiado!")));
+  document.getElementById("mfSearch").addEventListener("input", e=>{mfQuery=e.target.value; renderMfWrap();});
+  document.getElementById("mfClearBtn")?.addEventListener("click", ()=>{mfQuery=""; renderMfWrap();});
+  alvo.querySelectorAll(".copy-mf").forEach(b=>b.addEventListener("click", ()=>copyText(b.dataset.c,"Copiado!")));
+  bindContatoCrudEvents("marfrig", alvo, renderMfWrap);
 }
 
 /* ---------- ESCALONAMENTO (PML) ---------- */
@@ -1264,49 +1414,59 @@ function renderPML(){
     </div>
 
     <div class="section-label" style="margin-top:30px;">Gestores por Operação</div>
-    <div class="table-wrap" style="margin-bottom:30px;"><div class="table-scroll">
+    <div id="gestoresWrap" style="margin-bottom:30px;">${escalaLoadingHtml()}</div>
+
+    <div class="section-label">Contatos de Emergência — Grupo Crítico 24h (retorno em até 30 min)</div>
+    <div id="emergenciaWrap">${escalaLoadingHtml()}</div>
+  `;
+  document.getElementById("gotoFaixasLink").addEventListener("click", ()=>document.querySelector('.nav-item[data-view="faixas"]').click());
+  carregarContatos("gestores").then(renderGestoresWrap);
+  carregarContatos("emergencia").then(renderEmergenciaWrap);
+}
+
+function renderGestoresWrap(){
+  const alvo = document.getElementById("gestoresWrap");
+  if(!alvo) return;
+  alvo.innerHTML = `
+    ${souMaster() ? `<div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="mini-btn" id="contatoAddBtn_gestores" style="background:var(--accent);color:var(--on-accent);border-color:var(--accent)"><i class="bi bi-plus-lg"></i> ${CONTATOS_FORM_ABERTO.gestores ? "Fechar" : "Adicionar Contato"}</button></div>` : ""}
+    ${(souMaster() && CONTATOS_FORM_ABERTO.gestores) ? contatoFormHtml("gestores") : ""}
+    <div class="table-wrap"><div class="table-scroll">
       <table>
         <thead><tr><th>Operação</th><th>Gestor</th><th>Telefone</th><th></th></tr></thead>
         <tbody>
-        ${GESTORES.map(g=>`<tr>
+        ${GESTORES.length ? GESTORES.map(g=>`<tr>
           <td><span class="cat-pill">${g.operacao}</span></td>
           <td><b>${g.nome}</b></td>
           <td class="code-mono">${g.telefone}</td>
-          <td><button class="mini-btn copy-pml" data-c="${g.operacao} — ${g.nome} — ${g.telefone}"><i class="bi bi-clipboard"></i></button></td>
-        </tr>`).join("")}
+          <td>${contatoAcoesHtml("gestores", g.id, `<button class="mini-btn copy-pml" data-c="${g.operacao} — ${g.nome} — ${g.telefone}"><i class="bi bi-clipboard"></i></button>`)}</td>
+        </tr>`).join("") : `<tr><td colspan="4" style="text-align:center;color:var(--text-faint)">Nenhum gestor cadastrado.</td></tr>`}
         </tbody>
       </table>
     </div></div>
+  `;
+  alvo.querySelectorAll(".copy-pml").forEach(b=>b.addEventListener("click", ()=>copyText(b.dataset.c,"Copiado!")));
+  bindContatoCrudEvents("gestores", alvo, renderGestoresWrap);
+}
 
-    <div class="section-label">Coordenadores</div>
-    <div class="table-wrap" style="margin-bottom:30px;"><div class="table-scroll">
-      <table>
-        <thead><tr><th>Operação</th><th>Coordenador</th><th>Telefone</th><th></th></tr></thead>
-        <tbody>
-        ${COORDENADORES.map(c=>`<tr>
-          <td><span class="cat-pill">${c.operacao}</span></td>
-          <td><b>${c.nome}</b></td>
-          <td class="code-mono">${c.telefone}</td>
-          <td><button class="mini-btn copy-pml" data-c="${c.operacao} — ${c.nome} — ${c.telefone}"><i class="bi bi-clipboard"></i></button></td>
-        </tr>`).join("")}
-        </tbody>
-      </table>
-    </div></div>
-
-    <div class="section-label">Contatos de Emergência — Grupo Crítico 24h (retorno em até 30 min)</div>
+function renderEmergenciaWrap(){
+  const alvo = document.getElementById("emergenciaWrap");
+  if(!alvo) return;
+  alvo.innerHTML = `
+    ${souMaster() ? `<div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="mini-btn" id="contatoAddBtn_emergencia" style="background:var(--accent);color:var(--on-accent);border-color:var(--accent)"><i class="bi bi-plus-lg"></i> ${CONTATOS_FORM_ABERTO.emergencia ? "Fechar" : "Adicionar Contato"}</button></div>` : ""}
+    ${(souMaster() && CONTATOS_FORM_ABERTO.emergencia) ? contatoFormHtml("emergencia") : ""}
     <div class="cards-grid">
-      ${CONTATOS_EMERGENCIA.map(c=>`
+      ${CONTATOS_EMERGENCIA.length ? CONTATOS_EMERGENCIA.map(c=>`
       <div class="contact-card">
         <div class="contact-head"><div class="avatar">${c.nome.slice(0,2).toUpperCase()}</div>
           <div><div class="contact-name">${c.nome}</div><div class="contact-role">${c.funcao}</div></div></div>
         <div class="contact-row"><i class="bi bi-telephone"></i>${c.telefone}</div>
         <div class="contact-row"><i class="bi bi-envelope"></i>${c.email}</div>
-        <div class="proc-actions" style="margin-top:8px"><button class="mini-btn copy-pml" data-c="${c.nome} — ${c.telefone} — ${c.email}"><i class="bi bi-clipboard"></i> Copiar</button></div>
-      </div>`).join("")}
+        ${contatoAcoesHtml("emergencia", c.id, `<button class="mini-btn copy-pml" data-c="${c.nome} — ${c.telefone} — ${c.email}"><i class="bi bi-clipboard"></i> Copiar</button>`)}
+      </div>`).join("") : emptyState("bi-telephone-outbound","Nenhum contato cadastrado","Assim que o master cadastrar um contato de emergência, ele aparecerá aqui.")}
     </div>
   `;
-  document.getElementById("gotoFaixasLink").addEventListener("click", ()=>document.querySelector('.nav-item[data-view="faixas"]').click());
-  viewport.querySelectorAll(".copy-pml").forEach(b=>b.addEventListener("click", ()=>copyText(b.dataset.c,"Copiado!")));
+  alvo.querySelectorAll(".copy-pml").forEach(b=>b.addEventListener("click", ()=>copyText(b.dataset.c,"Copiado!")));
+  bindContatoCrudEvents("emergencia", alvo, renderEmergenciaWrap);
 }
 
 /* ---------- ESCALAS ---------- */
@@ -1849,16 +2009,14 @@ function runGlobalSearch(q){
   if(faMatch.length) groups.push(["bi-thermometer-half","Faixas de Temperatura", faMatch.map(f=>`<div class="gs-item"><b>${highlight(f.produto,q)} <span class="temp-badge t-${f.classe}" style="margin-left:6px">${f.faixa}</span></b><span>${f.nomenclatura} · cód. ${f.codigo}</span></div>`).join("")]);
   const emMatch = EMBARCADORES.filter(e=>(e.nome+e.codigo).toLowerCase().includes(ql));
   if(emMatch.length) groups.push(["bi-truck","Embarcadores", emMatch.map(e=>`<div class="gs-item"><b>${highlight(e.nome,q)}</b><span>Código ${e.codigo}</span></div>`).join("")]);
-  const cdMatch = CONDUTORES.filter(c=>(c.nome+c.telefone).toLowerCase().includes(ql));
-  if(cdMatch.length) groups.push(["bi-person-vcard","Condutores", cdMatch.map(c=>`<div class="gs-item"><b>${highlight(c.nome,q)}</b><span>${STATUS_MAP[c.status].label} · ${c.telefone}</span></div>`).join("")]);
+  const cdMatch = CONDUTORES.filter(c=>(c.nome+(c.numero_cadastrado||"")+(c.numero_correto||"")).toLowerCase().includes(ql));
+  if(cdMatch.length) groups.push(["bi-person-vcard","Condutores", cdMatch.map(c=>`<div class="gs-item"><b>${highlight(c.nome,q)}</b><span>${STATUS_MAP[c.status].label} · ${c.numero_correto || c.numero_cadastrado || "—"}</span></div>`).join("")]);
   const mtMatch = MANUTENCAO.filter(m=>(m.nome+m.telefone+m.funcao).toLowerCase().includes(ql));
   if(mtMatch.length) groups.push(["bi-tools","Contatos de Manutenção", mtMatch.map(m=>`<div class="gs-item"><b>${highlight(m.nome,q)}</b><span>${m.funcao} · ${m.telefone}</span></div>`).join("")]);
   const mfMatch = MARFRIG.filter(m=>(m.nome+m.telefone).toLowerCase().includes(ql));
   if(mfMatch.length) groups.push(["bi-signpost-split","Manobras Marfrig", mfMatch.map(m=>`<div class="gs-item"><b>${highlight(m.nome,q)}</b><span>${m.telefone} · ${m.horario}</span></div>`).join("")]);
   const gMatch = GESTORES.filter(g=>(g.nome+g.operacao+g.telefone).toLowerCase().includes(ql));
   if(gMatch.length) groups.push(["bi-diagram-3","Gestores (PML)", gMatch.map(g=>`<div class="gs-item"><b>${highlight(g.nome,q)}</b><span>${g.operacao} · ${g.telefone}</span></div>`).join("")]);
-  const cMatch = COORDENADORES.filter(c=>(c.nome+c.operacao+c.telefone).toLowerCase().includes(ql));
-  if(cMatch.length) groups.push(["bi-diagram-3","Coordenadores (PML)", cMatch.map(c=>`<div class="gs-item"><b>${highlight(c.nome,q)}</b><span>${c.operacao} · ${c.telefone}</span></div>`).join("")]);
   const ceMatch = CONTATOS_EMERGENCIA.filter(c=>(c.nome+c.funcao+c.telefone).toLowerCase().includes(ql));
   if(ceMatch.length) groups.push(["bi-diagram-3","Contatos de Emergência (PML)", ceMatch.map(c=>`<div class="gs-item"><b>${highlight(c.nome,q)}</b><span>${c.funcao} · ${c.telefone}</span></div>`).join("")]);
 
@@ -1996,7 +2154,7 @@ function updateOperatorBadge(){
   document.getElementById("operatorAvatar").textContent = name.slice(0,2).toUpperCase();
 }
 async function initApp(){
-  await loadProfileData();
+  await Promise.all([loadProfileData(), carregarTodosContatos()]);
   registrarLogin();
   updateOperatorBadge();
   currentView = "inicio";
